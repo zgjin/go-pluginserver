@@ -4,24 +4,25 @@ package main
 
 import (
 	"flag"
-	"runtime"
-	"github.com/ugorji/go/codec"
+	"fmt"
 	"log"
 	"net"
 	"net/rpc"
 	"os"
 	"reflect"
-	"fmt"
+	"runtime"
 	"time"
+
+	"github.com/ugorji/go/codec"
 )
 
 var version = "development"
 
 /* flags */
 var (
-	kongPrefix = flag.String("kong-prefix", "/usr/local/kong", "Kong prefix path (specified by the -p argument commonly used in the kong cli)")
-	dump = flag.String("dump-plugin-info", "", "Dump info about `plugin` as a MessagePack object")
-	pluginsDir = flag.String("plugins-directory", "", "Set directory `path` where to search plugins")
+	kongPrefix  = flag.String("kong-prefix", "/usr/local/kong", "Kong prefix path (specified by the -p argument commonly used in the kong cli)")
+	dump        = flag.String("dump-plugin-info", "", "Dump info about `plugin` as a MessagePack object")
+	pluginsDir  = flag.String("plugins-directory", "", "Set directory `path` where to search plugins")
 	showVersion = flag.Bool("version", false, "Print binary and runtime version")
 )
 
@@ -85,7 +86,7 @@ func runServer(listener net.Listener) {
 func startServer() {
 	err := os.Remove(socket)
 	if err != nil && !os.IsNotExist(err) {
-		log.Printf(`removing "%s": %s`, kongPrefix, err)
+		log.Printf(`removing "%s": %s`, *kongPrefix, err)
 		return
 	}
 
@@ -118,7 +119,7 @@ func main() {
 	if socket != "" {
 		go func() {
 			for {
-				if ! isParentAlive() {
+				if !isParentAlive() {
 					log.Printf("Kong exited; shutting down...")
 					os.Exit(0)
 				}

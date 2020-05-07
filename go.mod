@@ -1,4 +1,4 @@
-module github.com/Kong/go-pluginserver
+module github.com/zgjin/go-pluginserver
 
 go 1.13
 
